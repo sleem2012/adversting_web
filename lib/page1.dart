@@ -21,57 +21,57 @@ class FirstPage extends StatelessWidget {
       backgroundColor: appConfig.backColor,
       body: Directionality(
         textDirection: TextDirection.rtl,
-        child: Container(
-            padding: EdgeInsets.all(MediaQuery.of(context).size.width * .07),
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                TextFormFieldItemUi(
-                    ownFocus: FocusNode(),
-                    OnChanged: (v) {},
-                    nextFocus: FocusNode(),
-                    minLines: 1,
-                    maxLines: 5,
-                    textInputType: TextInputType.text,
-                    title: 'الرساله',
-                    iconPath: Icons.message),
-                    SizedBox(height: 5,),
-                DataTable(
-                    dividerThickness: 5,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                      width: 1,
-                      color: Colors.grey,
-                    )),
-                    columns: const [
-                      DataColumn(
-                          label: Text('الاسم'),
-                          tooltip: 'يظهر اسم المستخدم المسجل من المستخدم'),
-                      DataColumn(
-                          label: Text('رقم الهاتف'),
-                          tooltip: 'يظهر رقم الهاتف السمجل من المستخدم'),
-                      DataColumn(
-                          label: Text('البريد'),
-                          tooltip: 'يظهر البريد الالكتروني للمستخدم'),
-                      DataColumn(
-                          label: Text('الدوله'), tooltip: 'تظهر دولة المستخدم'),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            TextFormFieldItemUi(
+                ownFocus: FocusNode(),
+                OnChanged: (v) {},
+                nextFocus: FocusNode(),
+                minLines: 1,
+                maxLines: 7,
+                textInputType: TextInputType.text,
+                title: 'الرساله',
+                iconPath: Icons.message),
+            SizedBox(
+              height: 30,
+            ),
+            DataTable(
+                dividerThickness: 5,
+                decoration: BoxDecoration(
+                    border: Border.all(
+                  width: 1,
+                  color: Colors.grey,
+                )),
+                columns: const [
+                  DataColumn(
+                      label: Text('الاسم'),
+                      tooltip: 'يظهر اسم المستخدم المسجل من المستخدم'),
+                  DataColumn(
+                      label: Text('رقم الهاتف'),
+                      tooltip: 'يظهر رقم الهاتف السمجل من المستخدم'),
+                  DataColumn(
+                      label: Text('البريد'),
+                      tooltip: 'يظهر البريد الالكتروني للمستخدم'),
+                  DataColumn(
+                      label: Text('الدوله'), tooltip: 'تظهر دولة المستخدم'),
+                ],
+                rows:
+                    // ignore: prefer_const_literals_to_create_immutables
+                    [
+                  const DataRow(
+                    cells: [
+                      DataCell(
+                        Text("حمد سليم"),
+                      ),
+                      DataCell(Text("01015394940")),
+                      DataCell(Text("ahmedslem7799@gmail.com")),
+                      DataCell(Text("مصر"))
                     ],
-                    rows:
-                        // ignore: prefer_const_literals_to_create_immutables
-                        [
-                      const DataRow(
-                        cells: [
-                          DataCell(
-                            Text("حمد سليم"),
-                          ),
-                          DataCell(Text("01015394940")),
-                          DataCell(Text("ahmedslem7799@gmail.com")),
-                          DataCell(Text("مصر"))
-                        ],
-                      )
-                    ]),
-              ],
-            )),
+                  )
+                ]),
+          ],
+        ),
       ),
     ));
   }
