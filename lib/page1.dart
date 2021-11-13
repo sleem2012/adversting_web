@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:whatsweb/helpers/app_config.dart';
-import 'package:whatsweb/helpers/text_form_filed_ui.dart';
 
 import 'helpers/button_ui.dart';
+import 'helpers/text_form_filed_ui.dart';
 
 class FirstPage extends StatelessWidget {
   final emailFocus = FocusNode();
@@ -19,109 +19,59 @@ class FirstPage extends StatelessWidget {
         child: Scaffold(
       appBar: AppBar(),
       backgroundColor: appConfig.backColor,
-      body: Column(
-        children: [
-          Expanded(
-              child: Container(
-            color: appConfig.backColor,
-            padding: EdgeInsets.all(appConfig.paddingValue),
-            child: SingleChildScrollView(
-              child: Directionality(
-                textDirection: TextDirection.rtl,
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    children: [
-                      Container(
-                        color: Colors.white,
-                        padding: EdgeInsets.all(appConfig.paddingValue),
-                        child: Column(
-                          children: [
-                            TextFormFieldItemUi(
-                                OnChanged: (v) {},
-                                ownFocus: FocusNode(),
-                                nextFocus: emailFocus,
-                                minLines: 1,
-                                maxLines: 1,
-                                textInputType: TextInputType.text,
-                                title: 'الإسم',
-                                iconPath: Icons.person),
-                            SizedBox(
-                              height: appConfig.paddingValue,
-                            ),
-                            TextFormFieldItemUi(
-                              OnChanged: (v) {},
-                              ownFocus: FocusNode(),
-                              iconPath: Icons.email,
-                              nextFocus: phoneFocus,
-                              minLines: 1,
-                              maxLines: 1,
-                              textInputType: TextInputType.text,
-                              title: 'البريد الالكترونى',
-                            ),
-                            SizedBox(
-                              height: appConfig.paddingValue,
-                            ),
-                            TextFormFieldItemUi(
-                                OnChanged: (v) {},
-                                ownFocus: phoneFocus,
-                                nextFocus: smsFocus,
-                                minLines: 1,
-                                maxLines: 1,
-                                textInputType: TextInputType.text,
-                                title: 'رقم التليفون',
-                                iconPath: Icons.phone_android),
-                            SizedBox(
-                              height: appConfig.paddingValue,
-                            ),
-                            TextFormFieldItemUi(
-                                OnChanged: (v) {},
-                                ownFocus: smsFocus,
-                                nextFocus: FocusNode(),
-                                minLines: 1,
-                                maxLines: 5,
-                                textInputType: TextInputType.text,
-                                
-                                title: 'الرسالة',
-                                iconPath: Icons.message_outlined),
-                            SizedBox(
-                              height: appConfig.paddingValue,
-                            ),
-                            ButtonUi(
-                              borderColor: appConfig.colorMain,
-                              padding: 10.0,
-                              backColor: appConfig.colorMain,
-                              w: MediaQuery.of(context).size.width - 30.0,
-                              widget: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: const [
-                                  SizedBox(
-                                    width: 10.0,
-                                  ),
-                                  Text(
-                                    'إرسال الرسالة',
-                                    style: TextStyle(color: Colors.white),
-                                  )
-                                ],
-                              ),
-                              func: () {
-                                if (formKey.currentState.validate()) {}
-                              },
-                            ),
-                            SizedBox(
-                              height: appConfig.paddingValue * 2,
-                            )
-                          ],
-                        ),
-                      ),
+      body: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Container(
+            padding: EdgeInsets.all(MediaQuery.of(context).size.width * .07),
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: [
+                TextFormFieldItemUi(
+                    ownFocus: FocusNode(),
+                    OnChanged: (v) {},
+                    nextFocus: FocusNode(),
+                    minLines: 1,
+                    maxLines: 5,
+                    textInputType: TextInputType.text,
+                    title: 'الرساله',
+                    iconPath: Icons.message),
+                    SizedBox(height: 5,),
+                DataTable(
+                    dividerThickness: 5,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                      width: 1,
+                      color: Colors.grey,
+                    )),
+                    columns: const [
+                      DataColumn(
+                          label: Text('الاسم'),
+                          tooltip: 'يظهر اسم المستخدم المسجل من المستخدم'),
+                      DataColumn(
+                          label: Text('رقم الهاتف'),
+                          tooltip: 'يظهر رقم الهاتف السمجل من المستخدم'),
+                      DataColumn(
+                          label: Text('البريد'),
+                          tooltip: 'يظهر البريد الالكتروني للمستخدم'),
+                      DataColumn(
+                          label: Text('الدوله'), tooltip: 'تظهر دولة المستخدم'),
                     ],
-                  ),
-                ),
-              ),
-            ),
-          ))
-        ],
+                    rows:
+                        // ignore: prefer_const_literals_to_create_immutables
+                        [
+                      const DataRow(
+                        cells: [
+                          DataCell(
+                            Text("حمد سليم"),
+                          ),
+                          DataCell(Text("01015394940")),
+                          DataCell(Text("ahmedslem7799@gmail.com")),
+                          DataCell(Text("مصر"))
+                        ],
+                      )
+                    ]),
+              ],
+            )),
       ),
     ));
   }
