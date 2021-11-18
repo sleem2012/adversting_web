@@ -1,20 +1,31 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsweb/helpers/app_config.dart';
 import 'package:whatsweb/helpers/text_form_filed_ui.dart';
 
 import 'helpers/button_ui.dart';
 
-class SecondPage extends StatelessWidget {
-  final emailFocus = FocusNode();
-  final nameFocus = FocusNode();
-  final phoneFocus = FocusNode();
-  final regionFocus = FocusNode();
-
-  final formKey = GlobalKey<FormState>();
+class SecondPage extends StatefulWidget {
   SecondPage({Key key}) : super(key: key);
 
   @override
+  State<SecondPage> createState() => _SecondPageState();
+}
+
+class _SecondPageState extends State<SecondPage> {
+  final emailFocus = FocusNode();
+
+  final nameFocus = FocusNode();
+
+  final phoneFocus = FocusNode();
+
+  final regionFocus = FocusNode();
+
+  final formKey = GlobalKey<FormState>();
+
+  @override
   Widget build(BuildContext context) {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(),
@@ -81,7 +92,6 @@ class SecondPage extends StatelessWidget {
                                 minLines: 1,
                                 maxLines: 5,
                                 textInputType: TextInputType.text,
-                                
                                 title: 'الدوله',
                                 iconPath: Icons.location_city),
                             SizedBox(
@@ -105,11 +115,18 @@ class SecondPage extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              func: () {
-                                if (formKey.currentState.validate()) {}
+                              func: () async {
+                                // if (formKey.currentState.validate()) {
+                                // }
+                                await users.add({
+                                  'name': 'ahmed',
+                                  'email': "ahmedslem779@gmail.com",
+                                  'phone': 01015394940
+                                }).then((value) {
+                                  return print('done');
+                                });
                               },
                             ),
-                            
                             SizedBox(
                               height: appConfig.paddingValue * 2,
                             )

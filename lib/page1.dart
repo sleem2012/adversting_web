@@ -33,7 +33,7 @@ class FirstPage extends StatelessWidget {
                 textInputType: TextInputType.text,
                 title: 'الرساله',
                 iconPath: Icons.message),
-            SizedBox(
+           const SizedBox(
               height: 30,
             ),
             DataTable(

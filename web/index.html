@@ -97,5 +97,36 @@
       loadMainDartJs();
     }
   </script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js";
+    // import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js";
+    // import { auth } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js'
+    import { firestore } from 'https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js'
+ 
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyDhW1lAb5t_axAKQHMxxHKZQKk7Y3NE9nw",
+      authDomain: "flutterweb-591a7.firebaseapp.com",
+      projectId: "flutterweb-591a7",
+      storageBucket: "flutterweb-591a7.appspot.com",
+      messagingSenderId: "740673159478",
+      appId: "1:740673159478:web:bb333fbf22527901f83397",
+      measurementId: "G-2KD35JNSWG"
+    };
+  
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
 </body>
 </html>
