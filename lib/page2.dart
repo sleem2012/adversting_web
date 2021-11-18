@@ -28,10 +28,14 @@ class _SecondPageState extends State<SecondPage> {
   final regionFocus = FocusNode();
 
   final formKey = GlobalKey<FormState>();
+  var name ="";
+  var email ="";
+  var country ="";
+  var phone="";
 
   @override
   Widget build(BuildContext context) {
-    // CollectionReference users = FirebaseFirestore.instance.collection('users');
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
@@ -80,6 +84,9 @@ class _SecondPageState extends State<SecondPage> {
 
                           return null;
                         },
+                        onChanged: (v){
+                          name=v;
+                        },
                       ),
                       SizedBox(
                         height: appConfig.paddingValue,
@@ -97,6 +104,9 @@ class _SecondPageState extends State<SecondPage> {
                           }
 
                           return null;
+                        },
+                         onChanged: (v){
+                          email=v;
                         },
                       ),
                       SizedBox(
@@ -116,6 +126,9 @@ class _SecondPageState extends State<SecondPage> {
 
                           return null;
                         },
+                         onChanged: (v){
+                          phone=v;
+                        },
                       ),
                       SizedBox(
                         height: appConfig.paddingValue,
@@ -126,6 +139,9 @@ class _SecondPageState extends State<SecondPage> {
                         keyboardType: TextInputType.text,
                         hintText: ' الدوله',
                         labelText: ' الدوله',
+                        onChanged:(v){
+                          country=v;
+                        },
                         controller: regionController,
                         validator: (v) {
                           if (v.isEmpty) {
@@ -157,15 +173,16 @@ class _SecondPageState extends State<SecondPage> {
                           ],
                         ),
                         func: () async {
-                          // if (formKey.currentState.validate()) {
-                          // }
-                          // await users.add({
-                          //   'name': 'ahmed',
-                          //   'email': "ahmedslem779@gmail.com",
-                          //   'phone': 01015394940
-                          // }).then((value) {
-                          //   return print('done');
-                          // });
+                          if (formKey.currentState.validate()) {
+                            await users.add({
+                              'name': name,
+                              'email': email,
+                              'phone': phone,
+                              'country':country,
+                            }).then((value) {
+                              return print('sent firestore done');
+                            });
+                          }
                         },
                       ),
                       SizedBox(
