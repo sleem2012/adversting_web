@@ -1,78 +1,134 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:whatsweb/helpers/app_config.dart';
+import 'package:whatsweb/helpers/mediaQuery.dart';
 
-class TextFormFieldItemUi extends StatelessWidget {
-  const TextFormFieldItemUi(
-      {Key key,
-      @required this.iconPath,
-      @required this.OnChanged,
-      @required this.title,
-      @required this.maxLines,
-      @required this.minLines,
-      @required this.textInputType,
-      @required this.ownFocus,
-      @required this.nextFocus})
-      : super(key: key);
-  final IconData iconPath;
-  final Function OnChanged;
+class RegisterField extends StatelessWidget {
+  const RegisterField({
+    Key key,
+    this.verticalMargin,
+    this.hintText,
+    this.labelText,
+    this.hintTextNoLocal,
+    this.keyboardType,
+    this.obsecureText = false,
+    this.controller,
+    this.validator,
+    this.enableText = true,
+    this.isDetails = false,
+    this.formatter,
+    this.suffixIcon,
+    this.fillColor,
+    this.verticalPadding,
+    this.horizontalMargin,
+    this.globalKey,
+    this.onChanged,
+    this.maxLines = 1,
+  }) : super(key: key);
 
-  final String title;
-  final int minLines;
+  final String hintText, labelText;
+  final String hintTextNoLocal;
+  final List<TextInputFormatter> formatter;
+  final TextInputType keyboardType;
+  final bool obsecureText;
+  final void Function(String) onChanged;
+  final String Function(String) validator;
+  final TextEditingController controller;
+  final bool enableText;
+  final Widget suffixIcon;
+  final bool isDetails;
+  final Color fillColor;
+  final double verticalPadding;
+  final double horizontalMargin;
+    final double verticalMargin;
+
+  final Key globalKey;
   final int maxLines;
-  final TextInputType textInputType;
-  final FocusNode ownFocus;
-  final FocusNode nextFocus;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(
-        iconPath,
-          size: 15.0,
-          color: appConfig.colorMain,
-        ),
-        const SizedBox(
-          width: 10.0,
-        ),
-        Expanded(
-            child: Column(
-          children: [
-            TextFormField(
-              validator: (v) {
-                if (v.isEmpty) {
-                  return 'ادخل البيانات';
-                }
-                return null;
-              },
-              onChanged: OnChanged,
-              focusNode: ownFocus,
-              onFieldSubmitted: (value) {
-                FocusScope.of(context).requestFocus(nextFocus);
-              },
-              keyboardType: textInputType,
-              maxLines: maxLines,
-              minLines: minLines,
-              style: TextStyle(
-                  color: appConfig.colorText,
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w500),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: title,
-                hintStyle: TextStyle(
-                    color: appConfig.colorText,
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.w500),
-              ),
+    return Container(
+      margin:
+          EdgeInsets.symmetric(horizontal: horizontalMargin ?? 15, vertical: verticalMargin??5),
+      child: TextFormField(
+        key: globalKey,
+        onChanged: onChanged,
+        inputFormatters: formatter,
+        maxLines: isDetails ? null : 1,
+        enabled: enableText,
+        controller: controller,
+        validator: validator,
+        obscureText: obsecureText,
+        keyboardType: keyboardType,
+        decoration: InputDecoration(
+          fillColor: fillColor ?? Colors.transparent,
+          filled: fillColor != null,
+          labelText: labelText == null ? null : labelText,
+          labelStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: appConfig.colorMain,
+          ),
+          contentPadding: EdgeInsets.symmetric(
+              vertical: context.height * (verticalPadding ?? 0.022),
+              horizontal: context.width * 0.02),
+          suffixIcon: suffixIcon,
+          errorStyle: TextStyle(
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide(
+              color: appConfig.colorMain,
+              width: 25,
             ),
-            Divider(
-              height: 1.0,
-              color: appConfig.colorText.withOpacity(0.75),
-            )
-          ],
-        ))
-      ],
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide(
+              color: appConfig.colorMain,
+              width: 2,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide(
+              color: appConfig.colorMain,
+              width: 2,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide(
+              color: appConfig.colorMain,
+              width: 2,
+            ),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide(
+              color: appConfig.colorMain,
+              width: 2,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide(
+              color: Theme.of(context).errorColor,
+            ),
+          ),
+    
+          hintText: hintTextNoLocal ?? hintText == null
+              ? null
+              :hintText,
+          hintStyle: TextStyle(
+            color: Colors.grey,
+            fontSize: 17,
+          ),
+        ),
+      ),
     );
   }
 }

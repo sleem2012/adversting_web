@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:whatsweb/helpers/app_config.dart';
+import 'package:whatsweb/helpers/mediaQuery.dart';
 
 import 'helpers/button_ui.dart';
 import 'helpers/text_form_filed_ui.dart';
 
 class FirstPage extends StatelessWidget {
-  final emailFocus = FocusNode();
-  final nameFocus = FocusNode();
-  final phoneFocus = FocusNode();
-  final smsFocus = FocusNode();
-
+  var messageController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   FirstPage({Key key}) : super(key: key);
 
@@ -17,31 +14,48 @@ class FirstPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      appBar: AppBar(),
-      backgroundColor: appConfig.backColor,
+      backgroundColor: appConfig.backColorSelect,
       body: Directionality(
         textDirection: TextDirection.rtl,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            TextFormFieldItemUi(
-                ownFocus: FocusNode(),
-                OnChanged: (v) {},
-                nextFocus: FocusNode(),
-                minLines: 1,
-                maxLines: 7,
-                textInputType: TextInputType.text,
-                title: 'الرساله',
-                iconPath: Icons.message),
-           const SizedBox(
-              height: 30,
+            SizedBox(
+              height: 40,
+            ),
+            RegisterField(
+              horizontalMargin: context.width * .2,
+              globalKey: formKey,
+              isDetails: true,
+              keyboardType: TextInputType.text,
+              hintText: 'ادخل الرساله',
+              labelText: 'ادخل الرساله',
+              controller: messageController,
+              validator: (v) {
+                if (v.isEmpty) {
+                  return 'ادخل الرساله';
+                }
+
+                return null;
+              },
+            ),
+            ButtonUi(
+              w: context.width * .2,
+              padding: context.height * .02,
+              widget: Text('ارسال'),
+              func: () {},
+              backColor: appConfig.backColorSelect,
+              borderColor: appConfig.colorMain,
+            ),
+            SizedBox(
+              height: 15,
             ),
             DataTable(
                 dividerThickness: 5,
                 decoration: BoxDecoration(
                     border: Border.all(
                   width: 1,
-                  color: Colors.grey,
+                  color: appConfig.colorMain,
                 )),
                 columns: const [
                   DataColumn(
