@@ -27,14 +27,13 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  awesome_dialog: ^2.1.1
+  cloud_firestore: any
   cupertino_icons: ^1.0.2
   firebase_core: any
-  cloud_firestore: any
-  flutter_screenutil: ^5.0.0+2
-
-
   flutter:
     sdk: flutter
+  flutter_screenutil: ^5.0.0+2
   hexcolor: ^2.0.5
 
 dev_dependencies:

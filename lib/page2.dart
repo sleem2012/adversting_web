@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsweb/helpers/app_config.dart';
@@ -28,10 +29,10 @@ class _SecondPageState extends State<SecondPage> {
   final regionFocus = FocusNode();
 
   final formKey = GlobalKey<FormState>();
-  var name ="";
-  var email ="";
-  var country ="";
-  var phone="";
+  var name = "";
+  var email = "";
+  var country = "";
+  var phone = "";
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +85,8 @@ class _SecondPageState extends State<SecondPage> {
 
                           return null;
                         },
-                        onChanged: (v){
-                          name=v;
+                        onChanged: (v) {
+                          name = v;
                         },
                       ),
                       SizedBox(
@@ -105,8 +106,8 @@ class _SecondPageState extends State<SecondPage> {
 
                           return null;
                         },
-                         onChanged: (v){
-                          email=v;
+                        onChanged: (v) {
+                          email = v;
                         },
                       ),
                       SizedBox(
@@ -126,8 +127,8 @@ class _SecondPageState extends State<SecondPage> {
 
                           return null;
                         },
-                         onChanged: (v){
-                          phone=v;
+                        onChanged: (v) {
+                          phone = v;
                         },
                       ),
                       SizedBox(
@@ -139,8 +140,8 @@ class _SecondPageState extends State<SecondPage> {
                         keyboardType: TextInputType.text,
                         hintText: ' الدوله',
                         labelText: ' الدوله',
-                        onChanged:(v){
-                          country=v;
+                        onChanged: (v) {
+                          country = v;
                         },
                         controller: regionController,
                         validator: (v) {
@@ -178,9 +179,18 @@ class _SecondPageState extends State<SecondPage> {
                               'name': name,
                               'email': email,
                               'phone': phone,
-                              'country':country,
+                              'country': country,
                             }).then((value) {
-                              return print('sent firestore done');
+                              return AwesomeDialog(
+                                
+                                context: context,
+                                dialogType: DialogType.SUCCES,
+                                animType: AnimType.BOTTOMSLIDE,
+                                title: 'تم الارسال',
+                                desc:
+                                    'نشكرك علي تواصلك معنا وسيتم التواصل معك قريبا',
+                                btnOkOnPress: () {},
+                              )..show();
                             });
                           }
                         },
