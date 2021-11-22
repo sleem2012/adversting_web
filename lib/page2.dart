@@ -8,7 +8,7 @@ import 'package:whatsweb/helpers/text_form_filed_ui.dart';
 import 'helpers/button_ui.dart';
 
 class SecondPage extends StatefulWidget {
-  SecondPage({Key key}) : super(key: key);
+  const SecondPage({Key key}) : super(key: key);
 
   @override
   State<SecondPage> createState() => _SecondPageState();

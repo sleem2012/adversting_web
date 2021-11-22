@@ -1,21 +1,38 @@
 // ignore_for_file: missing_return
 
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sms/flutter_sms.dart';
 import 'package:whatsweb/helpers/app_config.dart';
 import 'package:whatsweb/helpers/mediaQuery.dart';
 
 import 'helpers/button_ui.dart';
 import 'helpers/text_form_filed_ui.dart';
 
+class FirstPage extends StatefulWidget {
+  const FirstPage({Key key}) : super(key: key);
 
+  @override
+  State<FirstPage> createState() => _FirstPageState();
+}
 
-class FirstPage extends StatelessWidget {
-  var messageController = TextEditingController();
+class _FirstPageState extends State<FirstPage> {
+  final messageController = TextEditingController();
+
   final formKey = GlobalKey<FormState>();
-  FirstPage({Key key}) : super(key: key);
+  List<String> recipients = [];
   final Stream<QuerySnapshot> users =
       FirebaseFirestore.instance.collection('users').snapshots();
+  void _sendSMS() async {
+    String _result =
+        await sendSMS(message: messageController.text, recipients: recipients)
+            .catchError((onError) {
+      log(onError);
+    });
+    log(_result);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,16 +67,15 @@ class FirstPage extends StatelessWidget {
               ButtonUi(
                 w: context.width * .2,
                 padding: context.height * .02,
-                widget: Text('ارسال'),
-                func: () {},
+                widget: const Text('ارسال'),
+                func: _sendSMS,
                 backColor: appConfig.backColorSelect,
                 borderColor: appConfig.colorMain,
               ),
               const SizedBox(
                 height: 15,
               ),
-              Container(
-                height: context.height,
+              SizedBox(
                 width: context.width * .6,
                 child: StreamBuilder<QuerySnapshot>(
                     stream: users,
@@ -72,49 +88,41 @@ class FirstPage extends StatelessWidget {
                         return const Center(child: CircularProgressIndicator());
                       }
                       final data = snapShot.requireData;
-                      return ListView.builder(
-                          itemCount: data.size,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) {
-                            return DataTable(
-                                dividerThickness: 5,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                  width: 1,
-                                  color: appConfig.colorMain,
-                                )),
-                                columns: const [
-                                  DataColumn(
-                                      label: Text('الاسم'),
-                                      tooltip:
-                                          'يظهر اسم المستخدم المسجل من المستخدم'),
-                                  DataColumn(
-                                      label: Text('رقم الهاتف'),
-                                      tooltip:
-                                          'يظهر رقم الهاتف السمجل من المستخدم'),
-                                  DataColumn(
-                                      label: Text('البريد'),
-                                      tooltip:
-                                          'يظهر البريد الالكتروني للمستخدم'),
-                                  DataColumn(
-                                      label: Text('الدوله'),
-                                      tooltip: 'تظهر دولة المستخدم'),
-                                ],
-                                rows: [
-                                  DataRow(
-                                    cells: [
-                                      DataCell(
-                                        Text(data.docs[index]['name']),
-                                      ),
-                                      DataCell(Text(data.docs[index]['phone']
-                                          .toString())),
-                                      DataCell(Text(data.docs[index]['email'])),
-                                      DataCell(
-                                          Text(data.docs[index]['country'])),
-                                    ],
-                                  )
-                                ]);
-                          });
+
+                      return DataTable(
+                          dividerThickness: 5,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                            width: 1,
+                            color: appConfig.colorMain,
+                          )),
+                          columns: const [
+                            DataColumn(
+                                label: Text('الاسم'),
+                                tooltip:
+                                    'يظهر اسم المستخدم المسجل من المستخدم'),
+                            DataColumn(
+                                label: Text('رقم الهاتف'),
+                                tooltip: 'يظهر رقم الهاتف السمجل من المستخدم'),
+                            DataColumn(
+                                label: Text('البريد'),
+                                tooltip: 'يظهر البريد الالكتروني للمستخدم'),
+                            DataColumn(
+                                label: Text('الدوله'),
+                                tooltip: 'تظهر دولة المستخدم'),
+                          ],
+                          rows: data.docs.map((e) {
+                            recipients.add(e['phone'].toString());
+                            log('$recipients');
+                            return DataRow(cells: [
+                              DataCell(
+                                Text(e['name']),
+                              ),
+                              DataCell(Text(e['phone'].toString())),
+                              DataCell(Text(e['email'])),
+                              DataCell(Text(e['country'])),
+                            ]);
+                          }).toList());
                     }),
               ),
             ],

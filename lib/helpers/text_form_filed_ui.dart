@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:whatsweb/helpers/app_config.dart';
 import 'package:whatsweb/helpers/mediaQuery.dart';
 
@@ -58,14 +58,17 @@ class RegisterField extends StatelessWidget {
         inputFormatters: formatter,
         maxLines: isDetails ? null : 1,
         enabled: enableText,
+        textAlign: TextAlign.right,
+        textDirection: TextDirection.rtl,
         controller: controller,
         validator: validator,
         obscureText: obsecureText,
         keyboardType: keyboardType,
         decoration: InputDecoration(
+          
           fillColor: fillColor ?? Colors.transparent,
           filled: fillColor != null,
-          labelText: labelText == null ? null : labelText,
+          labelText: labelText,
           labelStyle: TextStyle(
             fontWeight: FontWeight.bold,
             color: appConfig.colorMain,
@@ -74,7 +77,7 @@ class RegisterField extends StatelessWidget {
               vertical: context.height * (verticalPadding ?? 0.022),
               horizontal: context.width * 0.02),
           suffixIcon: suffixIcon,
-          errorStyle: TextStyle(
+          errorStyle: const TextStyle(
             color: Colors.red,
             fontWeight: FontWeight.bold,
           ),
@@ -123,7 +126,7 @@ class RegisterField extends StatelessWidget {
           hintText: hintTextNoLocal ?? hintText == null
               ? null
               :hintText,
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
             color: Colors.grey,
             fontSize: 17,
           ),
