@@ -1,15 +1,15 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:whatsweb/helpers/mediaQuery.dart';
 
 import 'package:whatsweb/helpers/app_config.dart';
-import 'package:whatsweb/helpers/mediaQuery.dart';
 
 class RegisterField extends StatelessWidget {
   const RegisterField({
     Key key,
     this.verticalMargin,
     this.hintText,
+    this.numbersOnly,
     this.labelText,
     this.hintTextNoLocal,
     this.keyboardType,
@@ -42,7 +42,8 @@ class RegisterField extends StatelessWidget {
   final Color fillColor;
   final double verticalPadding;
   final double horizontalMargin;
-    final double verticalMargin;
+  final double verticalMargin;
+  final bool numbersOnly;
 
   final Key globalKey;
   final int maxLines;
@@ -50,12 +51,14 @@ class RegisterField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin:
-          EdgeInsets.symmetric(horizontal: horizontalMargin ?? 15, vertical: verticalMargin??5),
+      margin: EdgeInsets.symmetric(
+          horizontal: horizontalMargin ?? 15, vertical: verticalMargin ?? 5),
       child: TextFormField(
         key: globalKey,
         onChanged: onChanged,
-        inputFormatters: formatter,
+        inputFormatters: numbersOnly == true
+            ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
+            : null,
         maxLines: isDetails ? null : 1,
         enabled: enableText,
         textAlign: TextAlign.right,
@@ -65,12 +68,10 @@ class RegisterField extends StatelessWidget {
         obscureText: obsecureText,
         keyboardType: keyboardType,
         decoration: InputDecoration(
-          
           fillColor: fillColor ?? Colors.transparent,
           filled: fillColor != null,
           labelText: labelText,
           labelStyle: TextStyle(
-            fontWeight: FontWeight.bold,
             color: appConfig.colorMain,
           ),
           contentPadding: EdgeInsets.symmetric(
@@ -122,13 +123,10 @@ class RegisterField extends StatelessWidget {
               color: Theme.of(context).errorColor,
             ),
           ),
-    
-          hintText: hintTextNoLocal ?? hintText == null
-              ? null
-              :hintText,
-          hintStyle: const TextStyle(
+          hintText: hintTextNoLocal ?? hintText == null ? null : hintText,
+          hintStyle: TextStyle(
             color: Colors.grey,
-            fontSize: 17,
+            fontSize: context.width * .01,
           ),
         ),
       ),

@@ -29,6 +29,8 @@ environment:
 dependencies:
   awesome_dialog: ^2.1.1
   cloud_firestore: any
+  country_code_picker: ^2.0.2
+  country_pickers: ^2.0.0
   cupertino_icons: ^1.0.2
   firebase_core: any
   flutter_sms: ^2.3.2

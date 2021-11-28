@@ -1,11 +1,14 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:country_pickers/country.dart';
+
 import 'package:flutter/material.dart';
 import 'package:whatsweb/helpers/app_config.dart';
 import 'package:whatsweb/helpers/mediaQuery.dart';
 import 'package:whatsweb/helpers/text_form_filed_ui.dart';
 
 import 'helpers/button_ui.dart';
+import 'helpers/countryCode.dart';
 
 class SecondPage extends StatefulWidget {
   const SecondPage({Key key}) : super(key: key);
@@ -29,10 +32,13 @@ class _SecondPageState extends State<SecondPage> {
   final regionFocus = FocusNode();
 
   final formKey = GlobalKey<FormState>();
-  var name = "";
-  var email = "";
-  var country = "";
-  var phone = "";
+  String name = "";
+  String email = "";
+  int phone = 0;
+  String country = 'egypt';
+
+  int countryCode = 20;
+  Color primaryColor = const Color(0xff18203d);
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +50,7 @@ class _SecondPageState extends State<SecondPage> {
         children: [
           Expanded(
               child: Container(
-            color: Colors.white,
+            color: Colors.transparent,
             padding: EdgeInsets.all(appConfig.paddingValue),
             child: SingleChildScrollView(
               child: Directionality(
@@ -107,15 +113,22 @@ class _SecondPageState extends State<SecondPage> {
                           return null;
                         },
                         onChanged: (v) {
-                          email = v;
+                          email = v.trim();
                         },
                       ),
                       SizedBox(
                         height: appConfig.paddingValue,
                       ),
                       RegisterField(
+                        numbersOnly: true,
+                        suffixIcon: CustomCountryCodePicker(
+                          onChange: (Country value) {
+                            countryCode = int.parse(value.phoneCode);
+                            country = value.name.toString();
+                          },
+                        ),
                         horizontalMargin: context.width * .2,
-                        isDetails: true,
+                        isDetails: false,
                         keyboardType: TextInputType.phone,
                         hintText: 'رقم الواتساب',
                         labelText: ' رقم الواتساب',
@@ -128,48 +141,32 @@ class _SecondPageState extends State<SecondPage> {
                           return null;
                         },
                         onChanged: (v) {
-                          phone = v;
+                          phone = int.parse(v);
                         },
                       ),
                       SizedBox(
                         height: appConfig.paddingValue,
-                      ),
-                      RegisterField(
-                        horizontalMargin: context.width * .2,
-                        isDetails: false,
-                        keyboardType: TextInputType.text,
-                        hintText: ' الدوله',
-                        labelText: ' الدوله',
-                        onChanged: (v) {
-                          country = v;
-                        },
-                        controller: regionController,
-                        validator: (v) {
-                          if (v.isEmpty) {
-                            return 'ادخل الدوله';
-                          }
-
-                          return null;
-                        },
                       ),
                       SizedBox(
                         height: appConfig.paddingValue,
                       ),
                       ButtonUi(
                         borderColor: appConfig.colorMain,
-                        padding: 10.0,
+                        padding: context.width * .01,
                         backColor: appConfig.colorMain,
                         w: context.width * .2,
                         widget: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            SizedBox(
+                          children: [
+                            const SizedBox(
                               width: 10.0,
                             ),
                             Text(
                               'إرسال البيانات',
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: context.width * .02),
                             )
                           ],
                         ),
@@ -180,9 +177,11 @@ class _SecondPageState extends State<SecondPage> {
                               'email': email,
                               'phone': phone,
                               'country': country,
+                              'countryCode ': countryCode,
+                              'createdAt':
+                                  DateTime.now().toString().substring(0, 10)
                             }).then((value) {
                               return AwesomeDialog(
-                                
                                 context: context,
                                 dialogType: DialogType.SUCCES,
                                 animType: AnimType.BOTTOMSLIDE,
