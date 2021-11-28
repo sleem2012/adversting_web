@@ -8,7 +8,7 @@ import 'package:whatsweb/helpers/themes.dart';
 class CustomCountryCodePicker extends StatelessWidget {
   final void Function(Country) onChange;
 
-  const CustomCountryCodePicker({Key key,  this.onChange})
+  const CustomCountryCodePicker({Key key, this.onChange, String initialValue})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,8 @@ class CustomCountryCodePicker extends StatelessWidget {
             ),
             Text(
               '+${country.phoneCode}(${country.isoCode})',
-              style: MainTheme.textFormFieldTextStyle,
+              style:
+                  MainTheme.textFormFieldTextStyle.copyWith(color: Colors.blue),
             ),
             const SizedBox(
               width: 8.0,

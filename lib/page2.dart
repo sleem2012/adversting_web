@@ -1,187 +1,140 @@
+// ignore_for_file: file_names
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_pickers/country.dart';
-
 import 'package:flutter/material.dart';
-import 'package:whatsweb/helpers/app_config.dart';
+import 'package:whatsweb/helpers/countryCode.dart';
 import 'package:whatsweb/helpers/mediaQuery.dart';
-import 'package:whatsweb/helpers/text_form_filed_ui.dart';
 
-import 'helpers/button_ui.dart';
-import 'helpers/countryCode.dart';
+import 'helpers/text_form_filed_ui.dart';
+import 'helpers/themes.dart';
 
-class SecondPage extends StatefulWidget {
-  const SecondPage({Key key}) : super(key: key);
+class AddOrEditUser extends StatefulWidget {
+  // final bool add;
+  final QueryDocumentSnapshot<Object> members;
+  const AddOrEditUser({
+    Key key,
+    // this.add,
+    this.members,
+  }) : super(key: key);
 
   @override
-  State<SecondPage> createState() => _SecondPageState();
+  State<AddOrEditUser> createState() => _AddOrEditUserState();
 }
 
-class _SecondPageState extends State<SecondPage> {
-  var nameController = TextEditingController();
-  var emailController = TextEditingController();
-  var phoneController = TextEditingController();
-  var regionController = TextEditingController();
-
-  final emailFocus = FocusNode();
-
-  final nameFocus = FocusNode();
-
-  final phoneFocus = FocusNode();
-
-  final regionFocus = FocusNode();
-
-  final formKey = GlobalKey<FormState>();
-  String name = "";
-  String email = "";
-  int phone = 0;
-  String country = 'egypt';
-
-  int countryCode = 20;
-  Color primaryColor = const Color(0xff18203d);
+class _AddOrEditUserState extends State<AddOrEditUser> {
+  String name,
+      phone,
+      email,
+      country = 'Egypt',
+      countryCode = '20',
+      intialCountry = 'EG';
 
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    // if (widget.add == false) {
+    //   if (widget.members['country'] == 'Egypt') {
+    //     country = 'Egypt';
+    //     intialCountry = 'EG';
+    //     countryCode = '20';
+    //   } else if (widget.members['country'] == 'Iraq') {
+    //     country = 'Iraq';
+    //     intialCountry = 'IQ';
+    //     countryCode = '964';
+    //   } else {
+    //     country = 'Turkey';
+    //     intialCountry = 'TR';
+    //     countryCode = '90';
+    //   }
+    // }
     return SafeArea(
-        child: Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          Expanded(
-              child: Container(
-            color: Colors.transparent,
-            padding: EdgeInsets.all(appConfig.paddingValue),
-            child: SingleChildScrollView(
-              child: Directionality(
-                textDirection: TextDirection.rtl,
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: context.height * .05,
-                      ),
-                      Text(
-                        'يسعدنا تواصلكم معنا',
-                        style: TextStyle(
-                            color: appConfig.colorMain,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: context.height * .01,
-                      ),
-                      Icon(Icons.account_circle,
-                          color: appConfig.colorMain,
-                          size: context.height * .08),
-                      SizedBox(
-                        height: context.height * .05,
-                      ),
-                      RegisterField(
-                        horizontalMargin: context.width * .2,
-                        isDetails: false,
-                        keyboardType: TextInputType.name,
-                        hintText: 'الاسم',
-                        labelText: 'الاسم',
-                        controller: nameController,
-                        validator: (v) {
-                          if (v.isEmpty) {
-                            return 'ادخل الاسم';
-                          }
+      child: Scaffold(
+        backgroundColor: const Color(0xff18203f),
+        body: Padding(
+          padding: EdgeInsets.all(context.width * .1),
+          child: Directionality(
+            textDirection: TextDirection.rtl,
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  SizedBox(
+                    height: context.height * .05,
+                  ),
+                  const Center(
+                    child: Text(
+                      'يسعدنا تواصلكم معنا',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(
+                    height: context.height * .01,
+                  ),
+                  Icon(Icons.account_circle,
+                      color: Colors.white, size: context.height * .08),
+                  SizedBox(
+                    height: context.height * .05,
+                  ),
+                  CustomTextFormField(
+                    onChanged: (v) {
+                      name = v.trim();
+                    },
+                    labelText: 'الاسم',
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomTextFormField(
+                    SuffixIcon: CustomCountryCodePicker(
+                      initialValue: 'IQ',
+                      onChange: (Country value) {
+                        countryCode = value.phoneCode;
 
-                          return null;
-                        },
-                        onChanged: (v) {
-                          name = v;
-                        },
-                      ),
-                      SizedBox(
-                        height: appConfig.paddingValue,
-                      ),
-                      RegisterField(
-                        horizontalMargin: context.width * .2,
-                        isDetails: true,
-                        keyboardType: TextInputType.emailAddress,
-                        hintText: 'البريد الالكترونى',
-                        labelText: 'البريد الالكترونى',
-                        controller: emailController,
-                        validator: (v) {
-                          if (v.isEmpty) {
-                            return 'ادخل البريد';
-                          }
-
-                          return null;
-                        },
-                        onChanged: (v) {
-                          email = v.trim();
-                        },
-                      ),
-                      SizedBox(
-                        height: appConfig.paddingValue,
-                      ),
-                      RegisterField(
-                        numbersOnly: true,
-                        suffixIcon: CustomCountryCodePicker(
-                          onChange: (Country value) {
-                            countryCode = int.parse(value.phoneCode);
-                            country = value.name.toString();
-                          },
-                        ),
-                        horizontalMargin: context.width * .2,
-                        isDetails: false,
-                        keyboardType: TextInputType.phone,
-                        hintText: 'رقم الواتساب',
-                        labelText: ' رقم الواتساب',
-                        controller: phoneController,
-                        validator: (v) {
-                          if (v.isEmpty) {
-                            return 'ادخل الرقم';
-                          }
-
-                          return null;
-                        },
-                        onChanged: (v) {
-                          phone = int.parse(v);
-                        },
-                      ),
-                      SizedBox(
-                        height: appConfig.paddingValue,
-                      ),
-                      SizedBox(
-                        height: appConfig.paddingValue,
-                      ),
-                      ButtonUi(
-                        borderColor: appConfig.colorMain,
-                        padding: context.width * .01,
-                        backColor: appConfig.colorMain,
-                        w: context.width * .2,
-                        widget: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(
-                              width: 10.0,
-                            ),
-                            Text(
-                              'إرسال البيانات',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: context.width * .02),
-                            )
-                          ],
-                        ),
-                        func: () async {
-                          if (formKey.currentState.validate()) {
-                            await users.add({
-                              'name': name,
-                              'email': email,
-                              'phone': phone,
-                              'country': country,
-                              'countryCode ': countryCode,
-                              'createdAt':
-                                  DateTime.now().toString().substring(0, 10)
-                            }).then((value) {
-                              return AwesomeDialog(
+                        country = value.name;
+                      },
+                    ),
+                    width: context.width * 0.4,
+                    onChanged: (v) {
+                      phone = v.trim();
+                    },
+                    // initialValue: widget.add == false
+                    //     ? widget.members['phone'].toString()
+                    //     : null,
+                    numbersOnly: true,
+                    labelText: 'رقم الهاتف',
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomTextFormField(
+                    onChanged: (v) {
+                      email = v.trim();
+                    },
+                    email: true,
+                    // initialValue:
+                    //     widget.add == false ? widget.members['email'] : null,
+                    labelText: 'البريد الالكتروني',
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextButton(
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          await users.add({
+                            'name': name,
+                            'email': email,
+                            'phone': phone,
+                            'countryCode': countryCode,
+                            'country': country,
+                            'createdAt':
+                                DateTime.now().toString().substring(0, 10)
+                          }).whenComplete(() => AwesomeDialog(
                                 context: context,
                                 dialogType: DialogType.SUCCES,
                                 animType: AnimType.BOTTOMSLIDE,
@@ -189,22 +142,26 @@ class _SecondPageState extends State<SecondPage> {
                                 desc:
                                     'نشكرك علي تواصلك معنا وسيتم التواصل معك قريبا',
                                 btnOkOnPress: () {},
-                              )..show();
-                            });
-                          }
-                        },
+                              )..show());
+                        }
+                      },
+                      child: Text(
+                        'ارسال البيانات',
+                        style: MainTheme.textFormFieldTextStyle
+                            .copyWith(fontSize: 15),
                       ),
-                      SizedBox(
-                        height: appConfig.paddingValue * 2,
-                      )
-                    ],
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              const Color(0xff25bcbb)))),
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
+                ],
               ),
             ),
-          ))
-        ],
+          ),
+        ),
       ),
-    ));
+    );
   }
 }

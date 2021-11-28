@@ -1,132 +1,113 @@
+// ignore_for_file: missing_return
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:whatsweb/helpers/mediaQuery.dart';
+import 'package:whatsweb/helpers/themes.dart';
 
-import 'package:whatsweb/helpers/app_config.dart';
+import 'convert_arabic_numbers_to_english_number.dart';
 
-class RegisterField extends StatelessWidget {
-  const RegisterField({
+class CustomTextFormField extends StatelessWidget {
+  const CustomTextFormField({
     Key key,
-    this.verticalMargin,
-    this.hintText,
-    this.numbersOnly,
-    this.labelText,
-    this.hintTextNoLocal,
-    this.keyboardType,
-    this.obsecureText = false,
-    this.controller,
-    this.validator,
-    this.enableText = true,
-    this.isDetails = false,
-    this.formatter,
-    this.suffixIcon,
-    this.fillColor,
-    this.verticalPadding,
-    this.horizontalMargin,
-    this.globalKey,
     this.onChanged,
-    this.maxLines = 1,
+    this.SuffixIcon,
+    this.initialValue,
+    this.labelText,
+    this.maxLines,
+    this.numbersOnly,
+    this.width,
+    this.email,
   }) : super(key: key);
-
-  final String hintText, labelText;
-  final String hintTextNoLocal;
-  final List<TextInputFormatter> formatter;
-  final TextInputType keyboardType;
-  final bool obsecureText;
-  final void Function(String) onChanged;
-  final String Function(String) validator;
-  final TextEditingController controller;
-  final bool enableText;
-  final Widget suffixIcon;
-  final bool isDetails;
-  final Color fillColor;
-  final double verticalPadding;
-  final double horizontalMargin;
-  final double verticalMargin;
-  final bool numbersOnly;
-
-  final Key globalKey;
+  final String initialValue, labelText;
   final int maxLines;
+  final bool numbersOnly, email;
+  final Widget SuffixIcon;
+
+  final double width;
+  final void Function(String) onChanged;
 
   @override
   Widget build(BuildContext context) {
+    final List<String> acceptedNumbers = [
+      '78',
+      '75',
+      '77',
+      '79',
+      '12',
+      '11',
+      '15',
+      '10',
+    ];
     return Container(
-      margin: EdgeInsets.symmetric(
-          horizontal: horizontalMargin ?? 15, vertical: verticalMargin ?? 5),
+      width: width,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+          color: const Color(0xff232c51),
+          border: Border.all(color: Colors.blue)),
       child: TextFormField(
-        key: globalKey,
-        onChanged: onChanged,
+        style: MainTheme.textFormFieldTextStyle.copyWith(color: Colors.white),
+        initialValue: initialValue,
+        keyboardType: numbersOnly == true ? TextInputType.number : null,
         inputFormatters: numbersOnly == true
             ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
             : null,
-        maxLines: isDetails ? null : 1,
-        enabled: enableText,
-        textAlign: TextAlign.right,
-        textDirection: TextDirection.rtl,
-        controller: controller,
-        validator: validator,
-        obscureText: obsecureText,
-        keyboardType: keyboardType,
+        maxLines: maxLines,
+        maxLength: numbersOnly == true ? 11 : null,
+        onChanged: onChanged,
+        validator: (v) {
+          if (v.isEmpty) {
+            return 'يرجي ملئ الحقل وعدم تركه فارغ';
+          }
+          if (v.length < 4) {
+            return 'يرجي ادخال بيانات حقيقيه كامله';
+          }
+          if (numbersOnly == true) {
+            v = convertToEnglishNumbers(v.trim());
+            bool phoneNumberAccepted = false;
+            if (v.startsWith('0')) {
+              v = v.substring(1, v.length);
+            }
+            for (String char in acceptedNumbers) {
+              phoneNumberAccepted = v.startsWith(char);
+              log(
+                phoneNumberAccepted.toString(),
+              );
+              log(v);
+              if (phoneNumberAccepted) {
+                break;
+              }
+            }
+            if (phoneNumberAccepted == false) {
+              return 'رقم هاتف غير صالح';
+            }
+            if (v.length < 10) {
+              return 'رقم هاتف قصير';
+            }
+          }
+          if (email == true && !v.contains('@')) {
+            return 'يرجي ادخال بريد الكتروني حقيقي';
+          }
+        },
         decoration: InputDecoration(
-          fillColor: fillColor ?? Colors.transparent,
-          filled: fillColor != null,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+          counterText: "",
           labelText: labelText,
-          labelStyle: TextStyle(
-            color: appConfig.colorMain,
+          suffixIcon: SuffixIcon,
+          labelStyle: const TextStyle(
+            color: Colors.white,
           ),
-          contentPadding: EdgeInsets.symmetric(
-              vertical: context.height * (verticalPadding ?? 0.022),
-              horizontal: context.width * 0.02),
-          suffixIcon: suffixIcon,
-          errorStyle: const TextStyle(
-            color: Colors.red,
-            fontWeight: FontWeight.bold,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: BorderSide(
-              color: appConfig.colorMain,
-              width: 25,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: BorderSide(
-              color: appConfig.colorMain,
-              width: 2,
-            ),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: BorderSide(
-              color: appConfig.colorMain,
-              width: 2,
-            ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: BorderSide(
-              color: appConfig.colorMain,
-              width: 2,
-            ),
-          ),
-          disabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: BorderSide(
-              color: appConfig.colorMain,
-              width: 2,
-            ),
-          ),
+          border: InputBorder.none,
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
             borderSide: BorderSide(
               color: Theme.of(context).errorColor,
             ),
           ),
-          hintText: hintTextNoLocal ?? hintText == null ? null : hintText,
-          hintStyle: TextStyle(
-            color: Colors.grey,
-            fontSize: context.width * .01,
+          hintStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 17,
           ),
         ),
       ),
