@@ -1,6 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <style>
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+    
+    .loader {
+      border: 16px solid #f3f3f3;
+      border-radius: 50%;
+      border: 15px solid ;
+      border-top: 16px solid darkcyan;
+      border-right: 16px solid white;
+      border-bottom: 16px solid darkblue;
+      border-left: 16px solid white;
+      width: 120px;
+      height: 120px;
+      -webkit-animation: spin 2s linear infinite;
+      animation: spin 2s linear infinite;
+    }
+    
+    @-webkit-keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+      }
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+    
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
   <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
@@ -11,7 +56,6 @@
     Fore more details:
     * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
   -->
-  <base href="/">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
@@ -20,14 +64,14 @@
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="adversting_web">
+  <meta name="apple-mobile-web-app-title" content="Tforex">
   <meta name="google-signin-client_id" content="839011021655-pm7hh2u36mm8tteel45lsnivkdtktaqn.apps.googleusercontent.com">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/images/adversting_web_logo.png"/>
 
-  <title>adversting_web</title>
+  <title>Tforex</title>
   
 
   <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
@@ -42,6 +86,10 @@
 </head>
 <body>
 
+  <div class="loading">
+    <div class="loader"></div>
+  </div>
+  <script src="main.dart.js" type="application/javascript"></script>
 
     <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
@@ -83,5 +131,6 @@
         });
       }
     </script>
+    
 </body>
 </html>

@@ -30,11 +30,12 @@ class _AddOrEditUserState extends State<AddOrEditUser> {
       country = 'Egypt',
       countryCode = '20',
       intialCountry = 'EG';
+          final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
-    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
     // if (widget.add == false) {
     //   if (widget.members['country'] == 'Egypt') {
     //     country = 'Egypt';
@@ -62,9 +63,6 @@ class _AddOrEditUserState extends State<AddOrEditUser> {
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  SizedBox(
-                    height: context.height * .05,
-                  ),
                   const Center(
                     child: Text(
                       'يسعدنا تواصلكم معنا',
