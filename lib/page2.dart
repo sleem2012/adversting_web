@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:whatsweb/helpers/countryCode.dart';
 import 'package:whatsweb/helpers/mediaQuery.dart';
 
+import 'helpers/convert_arabic_numbers_to_english_number.dart';
 import 'helpers/text_form_filed_ui.dart';
 import 'helpers/themes.dart';
 
@@ -30,7 +31,20 @@ class _AddOrEditUserState extends State<AddOrEditUser> {
       country = 'Egypt',
       countryCode = '20',
       intialCountry = 'EG';
-          final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final emailController = TextEditingController();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    phoneController.dispose();
+    emailController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +93,7 @@ class _AddOrEditUserState extends State<AddOrEditUser> {
                     height: context.height * .05,
                   ),
                   CustomTextFormField(
+                    controller: nameController,
                     onChanged: (v) {
                       name = v.trim();
                     },
@@ -88,28 +103,29 @@ class _AddOrEditUserState extends State<AddOrEditUser> {
                     height: 20,
                   ),
                   CustomTextFormField(
-                    SuffixIcon: CustomCountryCodePicker(
-                      initialValue: 'IQ',
-                      onChange: (Country value) {
-                        countryCode = value.phoneCode;
+                      controller: phoneController,
+                      numbersOnly: true,
+                      labelText: 'رقم الهاتف',
+                      SuffixIcon: CustomCountryCodePicker(
+                        initialValue: 'IQ',
+                        onChange: (Country value) {
+                          countryCode = value.phoneCode;
 
-                        country = value.name;
-                      },
-                    ),
-                    width: context.width * 0.4,
-                    onChanged: (v) {
-                      phone = v.trim();
-                    },
-                    // initialValue: widget.add == false
-                    //     ? widget.members['phone'].toString()
-                    //     : null,
-                    numbersOnly: true,
-                    labelText: 'رقم الهاتف',
-                  ),
+                          country = value.name;
+                        },
+                      ),
+                      width: context.width * 0.4,
+                      onChanged: (v) {
+                        phone = convertToEnglishNumbers(v.trim());
+                        if (v.startsWith('0')) {
+                          phone = v.substring(1, v.length);
+                        }
+                      }),
                   const SizedBox(
                     height: 20,
                   ),
                   CustomTextFormField(
+                    controller: emailController,
                     onChanged: (v) {
                       email = v.trim();
                     },
@@ -139,7 +155,11 @@ class _AddOrEditUserState extends State<AddOrEditUser> {
                                 title: 'تم الارسال',
                                 desc:
                                     'نشكرك علي تواصلك معنا وسيتم التواصل معك قريبا',
-                                btnOkOnPress: () {},
+                                btnOkOnPress: () {
+                                  nameController.clear();
+                                  phoneController.clear();
+                                  emailController.clear();
+                                },
                               )..show());
                         }
                       },

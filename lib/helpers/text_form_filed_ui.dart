@@ -1,6 +1,7 @@
 // ignore_for_file: missing_return
 
 import 'dart:developer';
+import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,11 +20,14 @@ class CustomTextFormField extends StatelessWidget {
     this.numbersOnly,
     this.width,
     this.email,
+    this.controller
   }) : super(key: key);
   final String initialValue, labelText;
   final int maxLines;
   final bool numbersOnly, email;
   final Widget SuffixIcon;
+     final TextEditingController  controller;
+
 
   final double width;
   final void Function(String) onChanged;
@@ -47,6 +51,7 @@ class CustomTextFormField extends StatelessWidget {
           color: const Color(0xff232c51),
           border: Border.all(color: Colors.blue)),
       child: TextFormField(
+        controller: controller,
         style: MainTheme.textFormFieldTextStyle.copyWith(color: Colors.white),
         initialValue: initialValue,
         keyboardType: numbersOnly == true ? TextInputType.number : null,
