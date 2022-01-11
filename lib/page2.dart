@@ -50,21 +50,7 @@ class _AddOrEditUserState extends State<AddOrEditUser> {
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-    // if (widget.add == false) {
-    //   if (widget.members['country'] == 'Egypt') {
-    //     country = 'Egypt';
-    //     intialCountry = 'EG';
-    //     countryCode = '20';
-    //   } else if (widget.members['country'] == 'Iraq') {
-    //     country = 'Iraq';
-    //     intialCountry = 'IQ';
-    //     countryCode = '964';
-    //   } else {
-    //     country = 'Turkey';
-    //     intialCountry = 'TR';
-    //     countryCode = '90';
-    //   }
-    // }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xff18203f),
@@ -87,8 +73,11 @@ class _AddOrEditUserState extends State<AddOrEditUser> {
                   SizedBox(
                     height: context.height * .01,
                   ),
-                  Icon(Icons.account_circle,
-                      color: Colors.white, size: context.height * .08),
+                  Icon(
+                    Icons.account_circle,
+                    color: Colors.white,
+                    size: context.height * .08,
+                  ),
                   SizedBox(
                     height: context.height * .05,
                   ),
